@@ -2,7 +2,7 @@ const router = require('express').Router();
 const {
   filterByQuery,
   findByid,
-  createNewNote,
+  noteBuilder,
   validateNote,
 } = require('../../lib/notes');
 let { notes } = require('../../db/db.json');
@@ -22,7 +22,7 @@ router.post('/notes', (req, res) => {
   if (!validateNote(req.body)) {
     res.status(400).send({ message: 'This note is incorrectly formatted.' });
   } else {
-    const note = createNewNote(req.body, notes);
+    const note = noteBuilder(req.body, notes);
     res.json(note);
   }
 });
@@ -48,7 +48,7 @@ router
     let parsedNotes = JSON.stringify(notes);
     notes = filteredResult;
 
-    fs.writeFileSync(__dirname + '/../../db/db.json', parsedNotes, err => {
+    fs.writeFileSync(__dirname + '../../db/db.json', parsedNotes, err => {
       if (err) throw err;
     });
 
